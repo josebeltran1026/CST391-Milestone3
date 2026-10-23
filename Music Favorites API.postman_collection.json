@@ -1,0 +1,241 @@
+{
+  "info": {
+    "_postman_id": "6d59e0e1-9307-4c67-a51e-65ae8a44df5c",
+    "name": "Music Favorites API",
+    "description": "Music Favorites API — CST-391 Milestone 3  \nAuthor: Jose Beltran Veles\n\nREST API built with Express, Node.js, TypeScript, and MySQL.\n\nBase URL: [http://127.0.0.1:3000](http://127.0.0.1:3000)\n\nFeatures:\n\n- Create, read, update, and delete albums.\n    \n- Add, view, and remove favorites for a specified user.\n    \n- Prevent duplicate favorites.\n    \n- Validate input and handle missing records.\n    \n\nSend POST and PUT bodies as application/json.\n\nResponse codes:  \n200 — Successful read, update, or deletion.  \n201 — Album or favorite created.  \n400 — Invalid input.  \n404 — Record not found.  \n409 — Duplicate favorite.  \n500 — Unexpected database failure.\n\nAuthentication and role authorization are deferred. User IDs  \nselect records and do not authenticate callers.\n\nFor album CRUD demonstrations, create an album first and use  \nthe returned album_id for subsequent GET, PUT, and DELETE requests.  \nThe previously tested album 3 has been deleted.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58163176",
+    "_collection_link": "https://go.postman.co/collection/58163176-6d59e0e1-9307-4c67-a51e-65ae8a44df5c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Get All Albums",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:3000/api/albums",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "albums"
+          ]
+        },
+        "description": "Returns all albums in the catalog.\n\nMethod: GET  \nURL: [http://127.0.0.1:3000/api/albums](http://127.0.0.1:3000/api/albums)  \nRequest body: None  \nAuthentication: None\n\n200 OK: Returns a JSON array of albums. Each album contains  \nalbum_id, title, artist, description, year, and image.  \nAn empty catalog returns \\[\\].\n\n500 Internal Server Error:  \n{\"message\":\"Unable to retrieve albums.\"}"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Album by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:3000/api/albums/1",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "albums",
+            "1"
+          ]
+        },
+        "description": "Returns one album by its ID.\n\nMethod: GET  \nExample URL: [http://127.0.0.1:3000/api/albums/1](http://127.0.0.1:3000/api/albums/1)  \nRequest body: None  \nAuthentication: None\n\nPath parameter:  \nid — Required positive integer identifying the album.\n\n200 OK: Returns a JSON object containing album_id, title,  \nartist, description, year, and image.\n\n400 Bad Request:  \n{\"message\":\"Album ID must be a positive integer.\"}\n\n404 Not Found:  \n{\"message\":\"Album not found.\"}\n\n500 Internal Server Error:  \n{\"message\":\"Unable to retrieve album.\"}"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Album",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Abbey Road\",\r\n  \"artist\": \"The Beatles\",\r\n  \"description\": \"Album created through the REST API.\",\r\n  \"year\": 1969,\r\n  \"image\": \"\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:3000/api/albums",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "albums"
+          ]
+        },
+        "description": "Creates an album in the catalog.\n\nMethod: POST  \nURL: [http://127.0.0.1:3000/api/albums](http://127.0.0.1:3000/api/albums)  \nAuthentication: None  \nContent-Type: application/json\n\nExample request body:  \n{  \n\"title\": \"Abbey Road\",  \n\"artist\": \"The Beatles\",  \n\"description\": \"Album created through the REST API.\",  \n\"year\": 1969,  \n\"image\": \"\"  \n}\n\nRequired fields:  \ntitle — Nonblank string, maximum 255 characters.  \nartist — Nonblank string, maximum 255 characters.  \nyear — Integer from 1000 to 9999.\n\nOptional fields:  \ndescription — String, maximum 10000 characters; defaults to \"\".  \nimage — String, maximum 2048 characters; defaults to \"\".\n\n201 Created: Returns the created album, including its generated  \nalbum_id. The Location header contains /api/albums/{album_id}.  \nUse the returned ID for later read, update, and delete requests.\n\n400 Bad Request: Invalid field types, values, or lengths.\n\n500 Internal Server Error:  \n{\"message\":\"Unable to create album.\"}"
+      },
+      "response": []
+    },
+    {
+      "name": "Update Album",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"Abbey Road\",\r\n  \"artist\": \"The Beatles\",\r\n  \"description\": \"Updated through the REST API for Milestone 3.\",\r\n  \"year\": 1969,\r\n  \"image\": \"\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:3000/api/albums/3",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "albums",
+            "3"
+          ]
+        },
+        "description": "Updates an existing album.\n\nMethod: PUT  \nExample URL: [http://127.0.0.1:3000/api/albums/3](http://127.0.0.1:3000/api/albums/3)  \nAuthentication: None  \nContent-Type: application/json\n\nPath parameter:  \nid — Required positive integer identifying an existing album.  \nReplace 3 with the ID returned by Create Album.\n\nExample request body:  \n{  \n\"title\": \"Abbey Road\",  \n\"artist\": \"The Beatles\",  \n\"description\": \"Updated through the REST API for Milestone 3.\",  \n\"year\": 1969,  \n\"image\": \"\"  \n}\n\nRequired fields:  \ntitle — Nonblank string, maximum 255 characters.  \nartist — Nonblank string, maximum 255 characters.  \nyear — Integer from 1000 to 9999.\n\nOptional fields:  \ndescription — String, maximum 10000 characters.  \nimage — String, maximum 2048 characters.  \nOmitting either optional field resets it to an empty string.\n\n200 OK: Returns the updated album as a JSON object.  \nVerify the saved changes using Get Album by ID.\n\n400 Bad Request: Invalid album ID or request fields.\n\n404 Not Found:  \n{\"message\":\"Album not found.\"}\n\n500 Internal Server Error:  \n{\"message\":\"Unable to update album.\"}"
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Album",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:3000/api/albums/3",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "albums",
+            "3"
+          ]
+        },
+        "description": "Deletes an album from the catalog.\n\nMethod: DELETE  \nExample URL: [http://127.0.0.1:3000/api/albums/3](http://127.0.0.1:3000/api/albums/3)  \nRequest body: None  \nAuthentication: None\n\nPath parameter:  \nid — Required positive integer identifying an existing album.  \nReplace 3 with the ID returned by Create Album.\n\n200 OK:  \n{  \n\"message\": \"Album deleted successfully.\",  \n\"album_id\": 3  \n}\n\nDeleting an album also deletes its related favorites through  \nthe database's ON DELETE CASCADE constraint.\n\nVerify deletion using Get Album by ID; it should return 404.\n\n400 Bad Request:  \n{\"message\":\"Album ID must be a positive integer.\"}\n\n404 Not Found:  \n{\"message\":\"Album not found.\"}\n\n500 Internal Server Error:  \n{\"message\":\"Unable to delete album.\"}"
+      },
+      "response": []
+    },
+    {
+      "name": "Get User Favorites",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:3000/api/users/1/favorites",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "users",
+            "1",
+            "favorites"
+          ]
+        },
+        "description": "Returns the favorites associated with a specified user.\n\nMethod: GET  \nExample URL: [http://127.0.0.1:3000/api/users/1/favorites](http://127.0.0.1:3000/api/users/1/favorites)  \nRequest body: None  \nAuthentication: None\n\nPath parameter:  \nuserId — Required positive integer identifying an existing user.  \nThis ID selects records; it does not authenticate the caller.\n\n200 OK: Returns a JSON array ordered by favorite_id.  \nEach entry contains favorite_id, user_id, album_id, created_at,  \ntitle, artist, description, year, and image.\n\nAn existing user with no favorites receives \\[\\].\n\n400 Bad Request:  \n{\"message\":\"User ID must be a positive integer.\"}\n\n404 Not Found:  \n{\"message\":\"User not found.\"}\n\n500 Internal Server Error:  \n{\"message\":\"Unable to retrieve favorites.\"}"
+      },
+      "response": []
+    },
+    {
+      "name": "Add Favorites",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"album_id\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:3000/api/users/1/favorites",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "users",
+            "1",
+            "favorites"
+          ]
+        },
+        "description": "Adds an existing album to a specified user's favorites.\n\nMethod: POST  \nExample URL: [http://127.0.0.1:3000/api/users/1/favorites](http://127.0.0.1:3000/api/users/1/favorites)  \nAuthentication: None  \nContent-Type: application/json\n\nPath parameter:  \nuserId — Required positive integer identifying an existing user.  \nThis ID selects records; it does not authenticate the caller.\n\nRequired request body:  \n{  \n\"album_id\": 1  \n}\n\nalbum_id must be a positive integer identifying an existing album.\n\n201 Created: Example response:  \n{  \n\"message\": \"Album added to favorites.\",  \n\"favorite_id\": 1,  \n\"user_id\": 1,  \n\"album_id\": 1  \n}\n\nfavorite_id is generated and may differ from this example.  \nVerify creation using Get User Favorites.\n\n400 Bad Request:  \n{\"message\":\"User ID and album_id must be positive integers.\"}\n\n404 Not Found:  \n{\"message\":\"User or album not found.\"}\n\n409 Conflict:  \n{\"message\":\"This album is already in the user's favorites.\"}\n\nThe unique constraint on (user_id, album_id) prevents duplicates.\n\n500 Internal Server Error:  \n{\"message\":\"Unable to add favorite.\"}"
+      },
+      "response": []
+    },
+    {
+      "name": "Remove Favorite",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:3000/api/users/1/favorites/1",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "users",
+            "1",
+            "favorites",
+            "1"
+          ]
+        },
+        "description": "Removes an album from a specified user's favorites.\n\nMethod: DELETE  \nExample URL: [http://127.0.0.1:3000/api/users/1/favorites/1](http://127.0.0.1:3000/api/users/1/favorites/1)  \nRequest body: None  \nAuthentication: None\n\nPath parameters:  \nuserId — Required positive integer identifying the user.  \nalbumId — Required positive integer identifying the album.  \nThe final URL value is album_id, not favorite_id.\n\nUser IDs select records; they do not authenticate callers.\n\n200 OK:  \n{  \n\"message\": \"Album removed from favorites.\",  \n\"user_id\": 1,  \n\"album_id\": 1  \n}\n\nThe album remains in the catalog.  \nVerify removal using Get User Favorites and confirm the album  \nstill exists using Get Album by ID.\n\n400 Bad Request:  \n{\"message\":\"User ID and album ID must be positive integers.\"}\n\n404 Not Found:  \n{\"message\":\"Favorite not found.\"}\n\nReturned when no favorite matches both IDs, including when  \nthe user or album does not exist.\n\n500 Internal Server Error:  \n{\"message\":\"Unable to remove favorite.\"}"
+      },
+      "response": []
+    }
+  ]
+}
